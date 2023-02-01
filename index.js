@@ -188,162 +188,11 @@ const getHeaderUrl = (urlObject) => {
   }
 };
 
-// const getTemplates = () => {
-//   var config = {
-//     method: 'get',
-//     url: `https://api.nexmo.com/v2/whatsapp-manager/wabas${process.env.waba}/templates`,
-//     headers: {
-//       Authorization: `Basic ${getAuth()}`,
-//     },
-//   };
-//   return new Promise((res, rej) => {
-//     axios(config)
-//       .then(function (response) {
-//         res(response.data.templates.filter((e) => e.status === 'APPROVED'));
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//         rej(error);
-//       });
-//   });
-// };
-
 function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-// const getMessagesReport = (results) => {
-//   const responseObj = {};
-//   responseObj.results = [];
-//   results.forEach((r) => {
-//     responseObj.results.push({
-//       objectId: Math.floor(Math.random() * 10),
-//       title: r.direction,
-//       created: r.date_received,
-//       from: r.from,
-//       to: r.to,
-//       message_body: r.message_body,
-//     });
-//   });
-//   return responseObj.results.sort(function (a, b) {
-//     return new Date(b.created) - new Date(a.created);
-//   });
-// };
-
-// const getRecords = (direction, phone) => {
-//   let url;
-//   //   const baseUrl = `https://api.nexmo.com/v2/reports/records?account_id=ca37991c&limit=${process.env.limit}&product=MESSAGES&include_message=true&date_start=2023-01-08T00:00:00Z&direction=${direction}`;
-//   const baseUrl = `https://api.nexmo.com/v2/reports/records?account_id=ca37991c&limit=${
-//     process.env.limit
-//   }&product=MESSAGES&include_message=true&date_start=${OneWeekAgo()}&direction=${direction}`;
-//   if (direction === 'outbound') {
-//     url = `${baseUrl}&to=${phone}`;
-//   } else {
-//     url = `${baseUrl}&from=${phone}`;
-//   }
-//   var config = {
-//     method: 'get',
-//     url: url,
-//     headers: {
-//       Authorization: `Basic ${getAuth()}`,
-//     },
-//   };
-//   return new Promise((res, rej) => {
-//     axios(config)
-//       .then(function (response) {
-//         res(response.data);
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//         rej(error);
-//       });
-//   });
-// };
-
 app.use(basicAuth);
-
-// app.get('/install', (req, res) => {
-//   console.log('');
-//   console.log('=== Initiating OAuth 2.0 flow with HubSpot ===');
-//   console.log('');
-//   console.log("===> Step 1: Redirecting user to your app's OAuth URL");
-//   res.redirect(authUrl);
-//   console.log('===> Step 2: User is being prompted for consent by HubSpot');
-// });
-
-// app.get('/oauth-callback', async (req, res) => {
-//   console.log('===> Step 3: Handling the request sent by the server');
-
-//   // Received a user authorization code, so now combine that with the other
-//   // required values and exchange both for an access token and a refresh token
-//   if (req.query.code) {
-//     console.log('       > Received an authorization token');
-
-//     const authCodeProof = {
-//       grant_type: 'authorization_code',
-//       client_id: CLIENT_ID,
-//       client_secret: CLIENT_SECRET,
-//       redirect_uri: REDIRECT_URI,
-//       code: req.query.code,
-//     };
-
-//     // Step 4
-//     // Exchange the authorization code for an access token and refresh token
-//     console.log('===> Step 4: Exchanging authorization code for an access token and refresh token');
-//     const token = await exchangeForTokens(req.sessionID, authCodeProof);
-//     if (token.message) {
-//       return res.redirect(`/error?msg=${token.message}`);
-//     }
-
-//     // Once the tokens have been retrieved, use them to make a query
-//     // to the HubSpot API
-//     res.redirect(`/`);
-//   }
-// });
-
-// const exchangeForTokens = async (userId, exchangeProof) => {
-//   try {
-//     const responseBody = await request.post('https://api.hubapi.com/oauth/v1/token', {
-//       form: exchangeProof,
-//     });
-//     // Usually, this token data should be persisted in a database and associated with
-//     // a user identity.
-//     const tokens = JSON.parse(responseBody);
-//     refreshTokenStore[userId] = tokens.refresh_token;
-//     accessTokenCache.set(userId, tokens.access_token, Math.round(tokens.expires_in * 0.75));
-
-//     console.log('       > Received an access token and refresh token');
-//     return tokens.access_token;
-//   } catch (e) {
-//     console.error(`       > Error exchanging ${exchangeProof.grant_type} for access token`);
-//     return JSON.parse(e.response.body);
-//   }
-// };
-
-// const refreshAccessToken = async (userId) => {
-//   const refreshTokenProof = {
-//     grant_type: 'refresh_token',
-//     client_id: CLIENT_ID,
-//     client_secret: CLIENT_SECRET,
-//     redirect_uri: REDIRECT_URI,
-//     refresh_token: refreshTokenStore[userId],
-//   };
-//   return await exchangeForTokens(userId, refreshTokenProof);
-// };
-
-// const getAccessToken = async (userId) => {
-//   // If the access token has expired, retrieve
-//   // a new one using the refresh token
-//   if (!accessTokenCache.get(userId)) {
-//     console.log('Refreshing expired access token');
-//     await refreshAccessToken(userId);
-//   }
-//   return accessTokenCache.get(userId);
-// };
-
-// const isAuthorized = (userId) => {
-//   return refreshTokenStore[userId] ? true : false;
-// };
 
 app.get('/history', async (req, res) => {
   try {
@@ -373,9 +222,6 @@ app.get('/info', (req, res) => {
       height: 748,
       associatedObjectProperties: ['lastname', 'phone'],
       uri: `https://${process.env.INSTANCE_SERVICE_NAME}.${process.env.REGION.split('.')[1]}.serverless.vonage.com/send`,
-      // uri: `https://neru-ca37991c-debug-debug.use1.serverless.vonage.com/send`,
-      //   uri: `${neru.getAppUrl()}/send`,
-      // uri: 'https://sms.ulgebra.com/send-sms?appCode=vonageforhubspotcrm&module=CONTACT&entityId=1#https://app-eu1.hubspot.com',
       label: 'Send message',
     },
   });
