@@ -1,0 +1,31 @@
+project:
+  name: neru-hubspot
+instance:
+  name: prod
+  runtime: nodejs16
+  region: aws.use1
+  application-id: asdsds-sdsdsdsd-sdsds
+  capabilities:
+    - messaging
+  entrypoint:
+    - node
+    - index.js
+  environment:
+    - name: limit
+      value: '3'
+    - name: number
+      value: '1234434'
+    - name: signature
+      value: '1232-232323-233'
+    - name: waba
+      value: '42244944067384'
+    - name: apiKey
+      value: myapikey
+    - name: apiSecret
+      value: mysecret@
+debug:
+  name: debug
+  entrypoint:
+    - nodemon
+    - --inspect
+    - index.js
