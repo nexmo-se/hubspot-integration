@@ -45,8 +45,7 @@ app.get('/send', comesFromHubspot, async (req, res) => {
       } else urlNeeded = true;
     }
     const templText = templates[0].components.find((e) => e.type === 'BODY').text;
-    res.render('temp.ejs', {
-      // hasHeader: headerNeedsInput,
+    res.render('index.ejs', {
       to: phone,
     });
   } catch (e) {
