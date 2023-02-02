@@ -32,6 +32,8 @@ You need to have a developer account to be able to create applications.
 
 6.1 In the Send Message Card, hit on the Custom actions Tab and add your `${neruAppUrl}` as a base URL under Base Action URLs.
 
+![Send Message Card](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/sendmessageaction.png)
+
 7. Configure the Conversation History Card as per the picture below and in the Fetch URL set `${neruAppUrl}/history`
 
 ![Send Message Card](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/historycard.png)
