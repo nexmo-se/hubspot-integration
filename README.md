@@ -18,9 +18,13 @@ The first step is to deploy this application in Neru.
 
 You need to have a developer account to be able to create applications.
 
-1. Create public application
-2. Add the neru app URL in the Redirect URL (on the Auth tab)
-3. Add the `crm.objects.contacts.read` scope (Auth tab)
+1. Create public application. See steps below
+
+First, you need to select your application name. Then you can navigate to the Auth tab. In the auth tab, you need to fill in the Redirect URL. Use first a dummy value such as google.com (This is needed so that we can create the application and get the clientId and clientSecret). Select `crm.objects.contacts.read` as scope. Hit on save and copy the clientId and clientSecret into the `neru.yml` file. You can deploy the application now
+
+2. Deploy the neru app.
+
+3. Add the neru app URL (instance host address 2) followed by `/oauth-callback` URL in the Redirect URL. Like this `${neruApp}/oauth-callback`.
 4. On the left hand-side click on CRM cards
 5. Create a CRM card called Send Message and another one called Conversation History.
 
@@ -37,3 +41,7 @@ You need to have a developer account to be able to create applications.
 7. Configure the Conversation History Card as per the picture below and in the Fetch URL set `${neruAppUrl}/history`
 
 ![Send Message Card](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/historycard.png)
+
+8. Grab the install URL from your app Auth tab and navigate to that URL. You need to have a separate (non-dev) account to install the application.
+
+Once the app is installed, you should be able to see the new CRM cards when you navigate to the Contacts tab in hubspot.

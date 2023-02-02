@@ -2,7 +2,7 @@ import { createHash } from 'crypto';
 
 export const basicAuth = async (req, res, next) => {
   const auth = { secret: process.env.signature }; // change this
-  if (!req.headers['x-hubspot-signature']) res.status(401).send('Authentication required.');
+  if (!req.headers['x-hubspot-signature']) return res.status(401).send('Authentication required.');
 
   // parse login and password from headers
   const signature = req.headers['x-hubspot-signature'];

@@ -8,19 +8,30 @@ import bodyParser from 'body-parser';
 import ejs from 'ejs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import session from 'express-session';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import { basicAuth, comesFromHubspot } from './services/auth.js';
 import { getTemplates } from './services/templates.js';
 import { getMessagesReport, getRecords } from './services/reports.js';
+import indexRouter from './routes/index.js';
 
-const session = neru.createSession();
-const messaging = new Messages(session);
+app.use(
+  session({
+    secret: Math.random().toString(36).substring(2),
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+const sess = neru.createSession();
+const messaging = new Messages(sess);
 
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use('/', indexRouter());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
