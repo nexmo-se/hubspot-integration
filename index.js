@@ -5,7 +5,6 @@ const app = express();
 const port = process.env.NERU_APP_PORT;
 
 import bodyParser from 'body-parser';
-import ejs from 'ejs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import session from 'express-session';
@@ -15,7 +14,9 @@ import { basicAuth, comesFromHubspot } from './services/auth.js';
 import { getTemplates } from './services/templates.js';
 import { getMessagesReport, getRecords } from './services/reports.js';
 import indexRouter from './routes/index.js';
-
+import workflowRouter from './routes/workflows.js';
+import { isEmpty } from './utils.js';
+import { sendSms } from './services/sms.js';
 app.use(
   session({
     secret: Math.random().toString(36).substring(2),
@@ -27,6 +28,10 @@ app.use(
 const sess = neru.createSession();
 const messaging = new Messages(sess);
 
+app.get('/_/health', async (req, res) => {
+  res.sendStatus(200);
+});
+
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,10 +39,6 @@ app.use(bodyParser.json());
 app.use('/', indexRouter());
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/_/health', async (req, res) => {
-  res.sendStatus(200);
-});
 
 app.get('/send', comesFromHubspot, async (req, res) => {
   let headerParams, urlNeeded, headerText;
@@ -85,6 +86,7 @@ app.post('/sendMessage', comesFromHubspot, async (req, res) => {
 
     res.json({ res: 'okay' });
   } catch (e) {
+    console.log(e);
     const error = new Error(e.response.data.detail);
     res.status(500).json({ error: error.message });
   }
@@ -197,11 +199,13 @@ const getHeaderUrl = (urlObject) => {
   }
 };
 
-function isEmpty(obj) {
-  return Object.keys(obj).length === 0;
-}
+// function isEmpty(obj) {
+//   return Object.keys(obj).length === 0;
+// }
 
 app.use(basicAuth);
+
+app.use('/workflows', workflowRouter(app, messaging));
 
 app.get('/history', async (req, res) => {
   try {

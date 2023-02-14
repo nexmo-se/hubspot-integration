@@ -69,6 +69,7 @@ export default function Router() {
       if (token.message) {
         return res.redirect(`/error?msg=${token.message}`);
       }
+      console.log(token);
 
       // Once the tokens have been retrieved, use them to make a query
       // to the HubSpot API
@@ -101,6 +102,8 @@ export default function Router() {
       // Usually, this token data should be persisted in a database and associated with
       // a user identity.
       const tokens = JSON.parse(responseBody);
+      console.log(tokens);
+
       refreshTokenStore[userId] = tokens.refresh_token;
       accessTokenCache.set(userId, tokens.access_token, Math.round(tokens.expires_in * 0.75));
 
