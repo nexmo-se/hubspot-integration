@@ -247,9 +247,14 @@
                 </div>
                 <select class="custom-select" id="inputChannel">
                   <!-- <option selected>Choose...</option> -->
-                  <option value="sms">SMS</option>
-                  <option selected value="whatsapp">WhatsApp</option>
-                  <option value="viber_service">Viber</option>
+                  <% for (let i=0; i<channels.length; i++) { %>
+                  <!-- <h2><%= channels %></h2> -->
+                  <option value="<%= channels[i] %>"><%= channels[i].toUpperCase() %></option>
+
+                  <% } %>
+                  <!-- <option value="sms">SMS</option>
+                  <option selected value="whatsapp">WhatsApp</option> -->
+                  <!-- <option value="viber_service">Viber</option> -->
                 </select>
               </div>
               <label style="display: none" for="senderIdField" id="senderIdField" class="form-label"

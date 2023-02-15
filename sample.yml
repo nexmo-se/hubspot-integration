@@ -25,6 +25,8 @@ instance:
       value: mysecret@
     - name: CLIENT_ID
       value: 123232-sdsads-23232
+    - name: channels
+      value: 'sms,whatsapp,viber_service'
     - name: hubspot_apikey
       value: wsd2-c977-859asd-sds
     - name: appId

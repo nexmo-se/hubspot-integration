@@ -40,6 +40,8 @@ app.use('/', indexRouter());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/send', comesFromHubspot, async (req, res) => {
+  console.log(process.env.channels);
+
   let headerParams, urlNeeded, headerText;
   console.log(req.headers.referer);
   try {
@@ -58,6 +60,7 @@ app.get('/send', comesFromHubspot, async (req, res) => {
     const templText = templates[0].components.find((e) => e.type === 'BODY').text;
     res.render('index.ejs', {
       to: phone,
+      channels: process.env.channels.split(','),
     });
   } catch (e) {
     console.log(e);
