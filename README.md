@@ -1,8 +1,8 @@
 # hubspot-integration
 
-This sample app shows you how to crete a connector that you can use in Hubspot to define custom CRM cards within your contacts.
+This sample app shows you how to crete a connector that you can use in Hubspot to define custom CRM cards within your contacts and to send SMS via automation workflows..
 
-This application allows you to send SMS, Viber and WhatsApp (text and template) messages
+This application allows you to send SMS, Viber and WhatsApp (text and template) messages from the Contacts page and allows for SMS sending via automation workflows.
 
 ## Hubspot application creation
 
@@ -45,3 +45,15 @@ The first step is to deploy this application in Neru.
 1. Create a neru app and populate a `neru.yml` as per `sample.yml` (Important that the package.json app is creaded with esnext. Follow [this link](https://vonage-neru.herokuapp.com/neru/tutorials/neru-dialer/neru/dialer/create-project))
 2. Install dependencies (`npm install`)
 3. Deploy the neru app and copy the URL ending with `serverless.com`
+
+## Workflows.
+
+This application creates a custom action that you can use when creating a workflow. This means that you can define your own trigger based on your contacts and send an SMS when the trigger action executes.
+
+To define a workflow, hit on the Automation tab and click on Workflows. Select create new Workflow of type contact. Define your custom trigger, add a new action and then scroll down until you see `Send SMS`. Just populate the message you want to send and the senderId (From) and you're good to go once you turn on the workflow.
+
+Some ilustrative screenshots are provided below.
+
+![Workflow definition](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/workflowaction.png)
+
+![Workflow parameters](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/workflowdefinition.png)
