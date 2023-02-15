@@ -23,10 +23,13 @@ instance:
       value: myapikey
     - name: apiSecret
       value: mysecret@
-       - name: CLIENT_ID
+    - name: CLIENT_ID
       value: 123232-sdsads-23232
-    - name: CLIENT_SECRET
-      value: 123232-sdsads-23232123232-sdsads-23232
+    - name: hubspot_apikey
+      value: wsd2-c977-859asd-sds
+    - name: appId
+      value: 123242
+
 debug:
   name: debug
   entrypoint:

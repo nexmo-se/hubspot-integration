@@ -16,7 +16,6 @@ import { getMessagesReport, getRecords } from './services/reports.js';
 import indexRouter from './routes/index.js';
 import workflowRouter from './routes/workflows.js';
 import { isEmpty } from './utils.js';
-import { sendSms } from './services/sms.js';
 app.use(
   session({
     secret: Math.random().toString(36).substring(2),
@@ -198,10 +197,6 @@ const getHeaderUrl = (urlObject) => {
     };
   }
 };
-
-// function isEmpty(obj) {
-//   return Object.keys(obj).length === 0;
-// }
 
 app.use(basicAuth);
 

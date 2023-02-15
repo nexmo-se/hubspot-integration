@@ -3,6 +3,7 @@ const router = express.Router();
 import axios from 'axios';
 import request from 'request-promise-native';
 import NodeCache from 'node-cache';
+import { smsDefinition } from '../workflowdefinition.js';
 //===========================================================================//
 //  HUBSPOT APP CONFIGURATION
 //
@@ -14,7 +15,7 @@ import NodeCache from 'node-cache';
 // Replace the following with the values from your app auth config,
 // or set them as environment variables before running.
 const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const CLIENT_SECRET = process.env.signature;
 const refreshTokenStore = {};
 const accessTokenCache = new NodeCache({ deleteOnExpire: true });
 // Scopes for this app will default to `crm.objects.contacts.read`
@@ -30,7 +31,7 @@ const REDIRECT_URI = `https://${process.env.INSTANCE_SERVICE_NAME}.${
 }.serverless.vonage.com/oauth-callback`;
 
 const authUrl =
-  'https://app.hubspot.com/oauth/authorize' +
+  'https://app-eu1.hubspot.com/oauth/authorize' +
   `?client_id=${encodeURIComponent(CLIENT_ID)}` + // app's client ID
   `&scope=${encodeURIComponent(SCOPES)}` + // scopes being requested by the app
   `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`; // where to send the user after the consent page
@@ -68,12 +69,12 @@ export default function Router() {
       const token = await exchangeForTokens(req.sessionID, authCodeProof);
       if (token.message) {
         return res.redirect(`/error?msg=${token.message}`);
+        console.log(token.message);
       }
-      console.log(token);
 
       // Once the tokens have been retrieved, use them to make a query
       // to the HubSpot API
-      res.redirect(`/`);
+      res.redirect(`/installation`);
     }
   });
 
@@ -86,8 +87,23 @@ export default function Router() {
     console.log('===> Step 2: User is being prompted for consent by HubSpot');
   });
 
-  router.get('/', (req, res) => {
-    res.send('hello and welcome');
+  router.get('/installation', async (req, res) => {
+    try {
+      const data = JSON.stringify(smsDefinition);
+      const config = {
+        method: 'post',
+        url: `https://api.hubspot.com/automation/v4/actions/${process.env.appId}?hapikey=${process.env.hubspot_apikey}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: data,
+      };
+      const responseData = await axios(config);
+      if (responseData.data) res.send('Thank you for installing the app');
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500).send(e.data.message);
+    }
   });
 
   const exchangeForTokens = async (userId, exchangeProof) => {
