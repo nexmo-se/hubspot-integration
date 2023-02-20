@@ -46,6 +46,10 @@ The first step is to deploy this application in Neru.
 2. Install dependencies (`npm install`)
 3. Deploy the neru app and copy the URL ending with `serverless.com`
 
+## Environment variables (`neru.yml`)
+
+Here you can find an explanation on the variables that you need to define on the `neru.yml` file
+
 ## Workflows.
 
 This application creates a custom action that you can use when creating a workflow. This means that you can define your own trigger based on your contacts and send an SMS when the trigger action executes.

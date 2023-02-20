@@ -3,7 +3,7 @@ import axios from 'axios';
 export const getRecords = (direction, phone) => {
   let url;
 
-  const baseUrl = `https://api.nexmo.com/v2/reports/records?account_id=ca37991c&limit=${
+  const baseUrl = `https://api.nexmo.com/v2/reports/records?account_id=${process.env.apiKey}&limit=${
     process.env.limit
   }&product=MESSAGES&include_message=true&date_start=${OneWeekAgo()}&direction=${direction}`;
   if (direction === 'outbound') {

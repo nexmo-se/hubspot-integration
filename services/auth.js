@@ -28,7 +28,7 @@ export const comesFromHubspot = async (req, res, next) => {
     (req.headers.referer.startsWith(
       `https://${process.env.INSTANCE_SERVICE_NAME}.${process.env.REGION.split('.')[1]}.serverless.vonage.com`
     ) ||
-      req.headers.referer.startsWith('https://app-eu1.hubspot.com'))
+      req.headers.referer.includes('hubspot.com'))
   ) {
     return next();
   } else {
