@@ -33,7 +33,7 @@ export const smsDefinition = {
     },
   ],
   objectRequestOptions: {
-    properties: ['mobilenumber'],
+    properties: ['phone'],
   },
   labels: {
     en: {
