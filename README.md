@@ -50,6 +50,17 @@ The first step is to deploy this application in Neru.
 
 Here you can find an explanation on the variables that you need to define on the `neru.yml` file
 
+1. Limit. This parameter defines how many messages you want to see in the conversation history (CRM card) with a given contact in the Contacts Tab
+2. Number. The whatsapp number that you want to use to send messages,
+3. Signature. The client secret that you can get when you create your Hubspot application
+4. waba. The Whatsapp Business Account ID
+5. channels. The number of channels that can be used in the Send Message CRM card (Contacts page). It supports SMS, WhatsApp and Viber
+6. apiKey. The Vonage API key.
+7. apiSecret. The Vonage API secret.
+8. CLIENT_ID. The client ID that you get from your Hubspot application.
+9. hubspot_apikey. The hubspot API key that you can generate in the Hubspot developer account under the `Apps` section
+10. appId. The hubspot application Id that you can get when you create your hubspot application.
+
 ## Workflows.
 
 This application creates a custom action that you can use when creating a workflow. This means that you can define your own trigger based on your contacts and send an SMS when the trigger action executes.
