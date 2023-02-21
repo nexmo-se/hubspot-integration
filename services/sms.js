@@ -1,5 +1,5 @@
 export const sendSms = async (messaging, sender, text, to) => {
-  const vonageNumber = { type: 'sms', number: '447520660729' };
+  const vonageNumber = { type: 'sms', number: 'test' };
   console.log('sending' + text);
 
   try {
