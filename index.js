@@ -40,11 +40,10 @@ app.use('/', indexRouter());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/send', comesFromHubspot, async (req, res) => {
-  console.log(req.headers.referer);
   try {
     const phone = req.query?.phone;
     res.render('index.ejs', {
-      to: phone,
+      to: phone || 'UNDEFINED',
       channels: process.env.channels.split(','),
     });
   } catch (e) {
@@ -190,11 +189,12 @@ app.get('/history', async (req, res) => {
   try {
     const phoneWithPlus = req.query?.phone;
     const phone = phoneWithPlus?.split('+')[1];
+    if (!phone) res.status(200);
     const inbound = await getRecords('inbound', phone);
     const outbound = await getRecords('outbound', phone);
     const records = [...inbound.records, ...outbound.records];
     const response = getMessagesReport(records);
-    if (!phone) throw new Error('no phone number provided');
+
     if (!records) throw new Error('something went wrong fetching conversation history');
 
     res.send({ results: response });
