@@ -153,10 +153,6 @@ app.post('/send-template', comesFromHubspot, async (req, res) => {
   res.json({ res: 'okay' });
 });
 
-const getNumberParams = (text) => {
-  return text.match(/[{{]/gi)?.length / 2;
-};
-
 const getHeaderUrl = (urlObject) => {
   if (urlObject?.type === 'IMAGE') {
     // headerObject['image'] = { link: urlObject?.headerUrl };
@@ -192,23 +188,25 @@ app.use('/workflows', workflowRouter(app, messaging));
 
 app.get('/history', async (req, res) => {
   try {
-    const phoneWithPlus = req.query.phone;
-    const phone = phoneWithPlus.split('+')[1];
+    const phoneWithPlus = req.query?.phone;
+    const phone = phoneWithPlus?.split('+')[1];
     const inbound = await getRecords('inbound', phone);
     const outbound = await getRecords('outbound', phone);
     const records = [...inbound.records, ...outbound.records];
     const response = getMessagesReport(records);
+    if (!phone) throw new Error('no phone number provided');
+    if (!records) throw new Error('something went wrong fetching conversation history');
 
     res.send({ results: response });
   } catch (e) {
     console.log(e);
-    res.sendStatus(500);
+    res.status(500).send(e);
   }
 });
 
 app.get('/info', (req, res) => {
-  const lastname = req.query.lastname;
-  const phone = req.query.phone;
+  const lastname = req.query?.lastname;
+  const phone = req.query?.phone;
 
   res.send({
     results: [],
