@@ -5,21 +5,21 @@ export const smsDefinition = {
   inputFields: [
     {
       typeDefinition: {
-        name: 'staticInput',
-        type: 'string',
-        fieldType: 'text',
-      },
-      supportedValueTypes: ['STATIC_VALUE'],
-      isRequired: true,
-    },
-    {
-      typeDefinition: {
         name: 'staticInput2',
         type: 'string',
         fieldType: 'text',
       },
       supportedValueTypes: ['STATIC_VALUE'],
       isRequired: false,
+    },
+    {
+      typeDefinition: {
+        name: 'staticInput',
+        type: 'string',
+        fieldType: 'text',
+      },
+      supportedValueTypes: ['STATIC_VALUE'],
+      isRequired: true,
     },
   ],
   outputFields: [
