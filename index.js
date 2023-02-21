@@ -56,7 +56,7 @@ app.post('/sendMessage', comesFromHubspot, async (req, res) => {
   try {
     const { text, to, channel, sender } = req.body;
 
-    const vonageNumber = { type: channel, number: '447520660729' };
+    const vonageNumber = { type: channel, number: process.env.number };
     console.log('sending ' + text + ' via ' + channel);
 
     const response = await messaging
