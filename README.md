@@ -30,7 +30,11 @@ First, you need to select your application name. Then you can navigate to the Au
 
 7. Configure the Conversation History Card as per the picture below and in the Fetch URL set `${neruAppUrl}/history`
 
-![Send Message Card](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/historycard.png)
+![History](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/historycard.png)
+
+Then configure the card properties as per the screenshot below.
+
+![Card properties](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/cardproperties.png)
 
 8. Grab the install URL from your app Auth tab and navigate to that URL. You need to have a separate (non-dev) account to install the application.
 
@@ -42,7 +46,7 @@ For this integration to work you need to create a Hubspot Public application tha
 
 The first step is to deploy this application in Neru.
 
-1. Create a neru app and populate a `neru.yml` as per `sample.yml` (Important that the package.json app is creaded with esnext. Follow [this link](https://vonage-neru.herokuapp.com/neru/tutorials/neru-dialer/neru/dialer/create-project))
+1. Create a neru app and populate a `neru.yml` as per `sample.yml` (Important that the package.json app is creaded with esnext. Follow [this link](https://vonage-neru.herokuapp.com/neru/tutorials/neru-dialer/neru/dialer/create-project)). Don't select any starter template, because otherwise the package.json file will be overriden.
 2. Install dependencies (`npm install`)
 3. Deploy the neru app and copy the URL ending with `serverless.com`
 
@@ -58,8 +62,10 @@ Here you can find an explanation on the variables that you need to define on the
 6. apiKey. The Vonage API key.
 7. apiSecret. The Vonage API secret.
 8. CLIENT_ID. The client ID that you get from your Hubspot application.
-9. hubspot_apikey. The hubspot API key that you can generate in the Hubspot developer account under the `Apps` section
-10. appId. The hubspot application Id that you can get when you create your hubspot application.
+9. hubspot_apikey. The hubspot API key that you can generate in the Hubspot developer account under the `Apps` section. See screenshot below.
+10. appId. The hubspot application Id that you can get when you create your hubspot application. See screenshot below.
+
+![app settings](https://github.com/nexmo-se/hubspot-integration/blob/main/public/images/appsettings.png)
 
 ## Workflows.
 
