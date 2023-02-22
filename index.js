@@ -42,6 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/send', comesFromHubspot, async (req, res) => {
   try {
     const phone = req.query?.phone;
+    console.log(process.env.channels.split(','));
+
     res.render('index.ejs', {
       to: phone || 'UNDEFINED',
       channels: process.env.channels.split(','),

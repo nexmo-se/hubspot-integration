@@ -16,13 +16,10 @@
       function handleShowOptions(e) {
         const channelSelected = e.target.value;
         const templateContainer = document.getElementById('templateContainer');
-        const sender = document.getElementById('senderIdField');
-        const senderId = document.getElementById('senderId');
-        senderId.value = '';
-
         if (channelSelected != 'whatsapp') {
           templateContainer.style.display = 'none';
         } else {
+          document.getElementById('sendTemplate').addEventListener('click', sendTemplate);
           templateContainer.style.display = 'block';
         }
         if (channelSelected != 'sms') {
@@ -69,8 +66,6 @@
 
           if (mediaUrl) {
             urlObject['headerUrl'] = mediaUrl;
-
-            // urlObject['type'] = mediaUrls[mediaUrl] ? 'IMAGE' : 'VIDEO';
           }
           if (headerParamDiv.childElementCount) {
             for (let i = 1; i <= headerParamDiv.childElementCount; i++) {
@@ -192,7 +187,7 @@
         prev = templateText;
         prevHeader = header;
       }
-
+    const buildTemplate = ()=>{
       getTemplates().then((templateData) => {
         buildOptions(templateData);
         document.getElementById('inputGroupSelect01').addEventListener('change', function (event) {
@@ -221,6 +216,7 @@
           }
         });
       });
+    }
     </script>
   </head>
   <body style="font-family: 'Oswald', sans-serif !important; background-color: rgb(219 226 238)">
@@ -246,16 +242,11 @@
                   <label class="input-group-text" for="inputChannel">Channel</label>
                 </div>
                 <select class="custom-select" id="inputChannel">
-                  <!-- <option selected>Choose...</option> -->
-                  <% for (let i=0; i<channels.length; i++) { %>
-                    <% if(channels[i] === 'whatsapp'){ %>
-                      <option selected value="<%= channels[i] %>"><%= channels[i].toUpperCase() %></option>
-                    <%}
-                     else{ %>  
-                      <option  value="<%= channels[i] %>"><%= channels[i].toUpperCase() %></option>
-                   <% } %>
-                  <% } %>
-                 
+                  
+                   <% for (let i=0; i< channels.length; i++) { %>      
+                      <option selected value="<%= channels[i] %>"><%= channels[i].toUpperCase() %></option> 
+                  <% } %> 
+
                 </select>
               </div>
               <label style="display: none" for="senderIdField" id="senderIdField" class="form-label"
@@ -285,6 +276,9 @@
             </div>
           </form>
 
+          <% for (let i=0; i<channels.length; i++) { %>
+            <% if(channels[i] === 'whatsapp'){ %>
+
           <div id="templateContainer" style="margin-top: 30px" class="mb-2">
             <div id="toastTemplate" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
               <div class="toast-header">
@@ -300,15 +294,28 @@
 
             <button id="sendTemplate" class="btn btn-primary float-start">Send starter template</button>
           </div>
+          <%} %>
+          <% } %>
+          
         </div>
       </div>
     </div>
 
     <script>
       const mainForm = document.getElementById('mainForm');
+      const sender = document.getElementById('senderIdField');
+      const senderId = document.getElementById('senderId');
       mainForm.addEventListener('submit', handleSubmit);
-      document.getElementById('sendTemplate').addEventListener('click', sendTemplate);
+      // document.getElementById('sendTemplate').addEventListener('click', sendTemplate);
       document.getElementById('inputChannel').addEventListener('change', handleShowOptions);
+      window.addEventListener('load', ()=>{   
+        const channel = document.getElementById('inputChannel').value
+        if(channel  === 'whatsapp') buildTemplate()
+        if(channel === 'sms') {
+          sender.style.display = 'block';
+          senderId.value = '';
+        }
+      })
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
