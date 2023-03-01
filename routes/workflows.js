@@ -6,20 +6,23 @@ export default function Router(app, messaging) {
   router.post('/', async (req, res) => {
     console.log('hit on workflows');
     try {
-      console.log(req.body);
-
       const text = req.body?.fields?.staticInput;
       const type = req.query?.type;
       const phone = req.body?.fields?.staticInput2;
       const to = req.body?.object?.properties?.phone;
+
+      if (!text || !type || !phone || !to) {
+        res.status(200).send('missing parameters');
+      }
       console.log('sending ' + type);
       if (type === 'sms') {
-        const resp = await sendSms(messaging, phone, text, to);
-        console.log(resp);
-        res.sendStatus(200);
-      }
-      if (!text || !type || !phone || !to) {
-        throw new Error('There is a missing parameter ');
+        try {
+          const resp = await sendSms(messaging, phone, text, to);
+          console.log(resp);
+          res.sendStatus(200);
+        } catch (e) {
+          res.status(500).send(e);
+        }
       }
     } catch (e) {
       console.log(e);

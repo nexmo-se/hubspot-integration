@@ -16,19 +16,52 @@ import { getMessagesReport, getRecords } from './services/reports.js';
 import indexRouter from './routes/index.js';
 import workflowRouter from './routes/workflows.js';
 import { isEmpty } from './utils.js';
-// app.use(
-//   session({
-//     secret: Math.random().toString(36).substring(2),
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
 
 const sess = neru.createSession();
 const messaging = new Messages(sess);
 
 app.get('/_/health', async (req, res) => {
   res.sendStatus(200);
+});
+
+app.post('/work', (req, res) => {
+  res.send({
+    options: [
+      {
+        label: 'greeting_rca',
+        description: 'Greeting',
+        value: '10',
+      },
+      {
+        label: 'order-dispatched',
+        description: 'Order dispatched',
+        value: '1',
+      },
+    ],
+
+    after: '1234=',
+    searchable: true,
+  });
+});
+
+app.post('/templ', (req, res) => {
+  res.send({
+    options: [
+      {
+        label: 'param1',
+        description: 'param1',
+        value: '10',
+      },
+      {
+        label: 'param2',
+        description: 'param2',
+        value: '1',
+      },
+    ],
+
+    after: '1234=',
+    searchable: true,
+  });
 });
 
 app.use(express.json());
@@ -89,13 +122,10 @@ app.get('/templates', comesFromHubspot, async (req, res) => {
   }
 });
 
-app.post('/send-template', comesFromHubspot, async (req, res) => {
+app.post('/send-template', async (req, res) => {
   const { params: parameters, to, name, urlObject, headerParameters, language } = req.body;
-
   let components = [];
-
   const parametersFormated = [];
-
   for (let parameter in parameters) {
     parametersFormated.push({ type: 'text', text: parameters[parameter] });
   }
@@ -156,8 +186,6 @@ app.post('/send-template', comesFromHubspot, async (req, res) => {
 
 const getHeaderUrl = (urlObject) => {
   if (urlObject?.type === 'IMAGE') {
-    // headerObject['image'] = { link: urlObject?.headerUrl };
-    // return headerObject;
     return {
       type: urlObject?.type?.toLowerCase(),
       image: {
