@@ -13,10 +13,10 @@ export default function Router(app, messaging, neru, Queue) {
       const phone = req.body?.fields?.staticInput2;
       const to = req.body?.object?.properties?.phone;
       const formattedData = [{ text, type, phone, to }];
-      await queueApi.enqueue('hubspot', formattedData).execute();
       if (!text || !type || !phone || !to) {
         res.status(200).send('missing parameters');
       } else {
+        await queueApi.enqueue('hubspot', formattedData).execute();
         res.sendStatus(200);
       }
     } catch (e) {
