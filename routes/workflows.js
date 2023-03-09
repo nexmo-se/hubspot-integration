@@ -30,9 +30,9 @@ export default function Router(app, messaging, neru, Queue) {
       const { text, type, phone, to } = req.body;
 
       if (type === 'sms') {
-        // const resp = await sendSms(messaging, phone, text, to);
-        // console.log(resp);
-        console.log('mocking message to ' + phone);
+        const resp = await sendSms(messaging, phone, text, to);
+        console.log(resp);
+        // console.log('mocking message to ' + phone);
 
         res.sendStatus(200);
       }
