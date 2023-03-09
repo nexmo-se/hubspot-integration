@@ -1,4 +1,4 @@
-import { neru, Messages } from 'neru-alpha';
+import { neru, Messages, Queue } from 'neru-alpha';
 import express from 'express';
 
 const app = express();
@@ -44,30 +44,103 @@ app.post('/work', (req, res) => {
   });
 });
 
-app.post('/templ', (req, res) => {
-  res.send({
-    options: [
-      {
-        label: 'param1',
-        description: 'param1',
-        value: '10',
-      },
-      {
-        label: 'param2',
-        description: 'param2',
-        value: '1',
-      },
-    ],
-
-    after: '1234=',
-    searchable: true,
-  });
-});
-
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.post('/queue', async (req, res) => {
+  const session = neru.createSession();
+  const queueApi = new Queue(session);
+
+  await queueApi
+    .createQueue('test', '/webhook', {
+      maxInflight: 200,
+      msgPerSecond: 1,
+      active: true,
+    })
+    .execute();
+
+  res.sendStatus(200);
+});
+
+app.get('/list', async (req, res) => {
+  const session = neru.createSession();
+  const queueApi = new Queue(session);
+
+  const result = await queueApi.list().execute();
+
+  res.send(result);
+});
+
+app.delete('/queues/:name', async (req, res) => {
+  const name = req.params.name;
+  const session = neru.createSession();
+  const queueApi = new Queue(session);
+
+  await queueApi.deleteQueue(name).execute();
+
+  res.sendStatus(200);
+});
+
+app.post('/create', async (req, res) => {
+  const session = neru.createSession();
+  const queueApi = new Queue(session);
+
+  try {
+    await queueApi
+      .createQueue('hubspot', '/workflows/consumer', {
+        maxInflight: 200,
+        msgPerSecond: 1,
+        active: true,
+      })
+      .execute();
+
+    res.sendStatus(201);
+  } catch (e) {
+    console.log(e.message);
+    res.status.send(e.message);
+  }
+});
+
+app.get('/queue', async (req, res) => {
+  const session = neru.createSession();
+  const queueApi = new Queue(session);
+
+  const result = await queueApi.getQueueDetails('hubspot').execute();
+
+  res.send(result);
+});
+
+app.post('/webhook', async (req, res) => {
+  const datetime = new Date();
+  console.log(datetime.toISOString());
+  console.log(req.body);
+
+  // send messages at 1 sms per sec
+
+  res.sendStatus(200);
+});
+
+app.post('/consume', async (req, res) => {
+  // const name = req.params.name;
+  const session = neru.createSession();
+  const queueApi = new Queue(session);
+  const obj = req.body.object;
+  const input = req.body.inputFields;
+
+  const array = [{ ...obj, ...input }];
+
+  try {
+    await queueApi.enqueue('test', array).execute();
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e.message);
+
+    res.status(502).send(e.message);
+  }
+});
 app.use('/', indexRouter());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -213,7 +286,7 @@ const getHeaderUrl = (urlObject) => {
 
 app.use(basicAuth);
 
-app.use('/workflows', workflowRouter(app, messaging));
+app.use('/workflows', workflowRouter(app, messaging, neru, Queue));
 
 app.get('/history', async (req, res) => {
   try {

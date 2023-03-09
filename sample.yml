@@ -29,6 +29,8 @@ instance:
       value: 'sms,whatsapp,viber_service'
     - name: hubspot_apikey
       value: wsd2-c977-859asd-sds
+    - name: queue
+      value: hubspot
     - name: appId
       value: 123242
 
