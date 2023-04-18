@@ -6,6 +6,9 @@ const port = process.env.NERU_APP_PORT;
 
 import bodyParser from 'body-parser';
 import path from 'path';
+import libphonenumber from 'google-libphonenumber';
+
+const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 import { fileURLToPath } from 'url';
 // import session from 'express-session';
 const __filename = fileURLToPath(import.meta.url);
@@ -15,33 +18,13 @@ import { getTemplates } from './services/templates.js';
 import { getMessagesReport, getRecords } from './services/reports.js';
 import indexRouter from './routes/index.js';
 import workflowRouter from './routes/workflows.js';
-import { isEmpty } from './utils.js';
+import { isEmpty, formatNumber } from './utils.js';
 
 const sess = neru.createSession();
 const messaging = new Messages(sess);
 
 app.get('/_/health', async (req, res) => {
   res.sendStatus(200);
-});
-
-app.post('/work', (req, res) => {
-  res.send({
-    options: [
-      {
-        label: 'greeting_rca',
-        description: 'Greeting',
-        value: '10',
-      },
-      {
-        label: 'order-dispatched',
-        description: 'Order dispatched',
-        value: '1',
-      },
-    ],
-
-    after: '1234=',
-    searchable: true,
-  });
 });
 
 app.use(express.json());
@@ -105,9 +88,9 @@ app.get('/send', comesFromHubspot, async (req, res) => {
   try {
     const phone = req.query?.phone;
     console.log(process.env.channels.split(','));
-
+    const phoneFormatted = formatNumber(phone);
     res.render('index.ejs', {
-      to: phone || 'UNDEFINED',
+      to: phoneFormatted || 'UNDEFINED',
       channels: process.env.channels.split(','),
     });
   } catch (e) {
@@ -121,12 +104,12 @@ app.post('/sendMessage', comesFromHubspot, async (req, res) => {
     const { text, to, channel, sender } = req.body;
 
     const vonageNumber = { type: channel, number: process.env.number };
-    console.log('sending ' + text + ' via ' + channel);
-
+    // console.log('sending ' + text + ' via ' + channel);
+    const toFormatted = formatNumber(to);
     const response = await messaging
       .send({
         message_type: 'text',
-        to: to,
+        to: toFormatted,
         from: sender ? sender : vonageNumber.number,
         channel: vonageNumber.type,
         text: text,
@@ -247,7 +230,16 @@ app.use('/workflows', workflowRouter(app, messaging, neru, Queue));
 app.get('/history', async (req, res) => {
   try {
     const phoneWithPlus = req.query?.phone;
-    const phone = phoneWithPlus?.split('+')[1];
+    const phoneNumber = phoneUtil.parseAndKeepRawInput(phoneWithPlus, 'US');
+    const formattedNumber = phoneUtil.format(phoneNumber, libphonenumber.PhoneNumberFormat.E164);
+
+    // console.log('phonewithplus ' + phoneWithPlus);
+
+    // const phoneFormatted = formatNumber(phoneWithPlus);
+    // console.log('phoneFormatted ' + phoneFormatted);
+
+    const phone = formattedNumber.split('+')[1];
+
     if (!phone) res.status(200);
     const inbound = await getRecords('inbound', phone);
     const outbound = await getRecords('outbound', phone);

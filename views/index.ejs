@@ -141,6 +141,7 @@
 
             body.innerText = responseData.status;
             new bootstrap.Toast(document.querySelector('#toastBasic')).show();
+            window.parent.postMessage(JSON.stringify({"action": "DONE"}), "*");
             return;
           }
           const respError = await responseData.json();

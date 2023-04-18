@@ -6,7 +6,7 @@ instance:
   region: aws.use1
   application-id: asdsds-sdsdsdsd-sdsds
   capabilities:
-    - messaging
+    - messaging-v1
   entrypoint:
     - node
     - index.js
@@ -33,6 +33,8 @@ instance:
       value: hubspot
     - name: appId
       value: 123242
+    - name: refresh_token
+      value: eu1-a3443-sdsdsds-123243
 
 debug:
   name: debug

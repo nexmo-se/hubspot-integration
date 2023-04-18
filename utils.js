@@ -11,3 +11,10 @@ export const isEmpty = (obj) => {
 export const getAuth = () => {
   return Buffer.from(`${process.env.apiKey}:${process.env.apiSecret}`).toString('base64');
 };
+export const formatNumber = (number) => {
+  if (!number.startsWith('+')) {
+    return `1${number}`;
+  } else {
+    return number;
+  }
+};

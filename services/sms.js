@@ -1,6 +1,6 @@
 export const sendSms = async (messaging, sender, text, to) => {
   const vonageNumber = { type: 'sms', number: 'test' };
-  console.log('sending' + text);
+  // console.log('sending' + text);
 
   try {
     const response = await messaging
